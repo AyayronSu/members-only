@@ -24,9 +24,28 @@ async function updateUserStatus(userId) {
     );
 }
 
+async function insertMessage(title, text, userId) {
+    await pool.query(
+        'INSERT INTO messages (title, text, user_id) VALUES ($1, $2, $3)',
+        [title, text, userId]
+    );
+}
+
+async function getAllMessages() {
+    const { rows } = await pool.query(`
+        SELECT messages.*, users.first_name, users.last_name
+        FROM messages
+        JOIN users ON messages.user_id = users.id
+        ORDER BY timestamp DESC
+        `);
+        return rows;
+}
+
 module.exports = { 
     insertUser,
     getUserByUsername,
     getUserById,
-    updateUserStatus
+    updateUserStatus,
+    insertMessage,
+    getAllMessages
 };

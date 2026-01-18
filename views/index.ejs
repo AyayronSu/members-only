@@ -20,5 +20,26 @@
         <a href="/log-in">Log In</a>
         <a href="/sign-up">Sign Up</a>
     <% } %>
+
+    <hr>
+    <h2>Message Board</h2>
+    <% if (currentUser) { %>
+        <a href="/new-message">Post a New Message</a>
+    <% } %>
+
+    <div class="messages-container">
+        <% messages.forEach(msg => { %>
+            <div class="message-card" style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                <h3><%= msg.title %></h3>
+                <p><%= msg.text %></p>
+
+                <p>
+                    <strong>Posted by:</strong>
+                    <%= (currentUser && currentUser.membership_status) ? msg.first_name + ' ' + msg.last_name : 'Anonymous' %>
+                </p>
+                <p><small><%= msg.timestamp %></small></p>
+            </div>
+        <% }) %>
+    </div>
 </body>
 </html>

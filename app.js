@@ -62,7 +62,6 @@ app.use((req, res, next) => {
 
 app.get('/sign-up', userController.signUpGet);
 app.post('/sign-up', userController.signUpPost);
-app.get('/', (req, res) => res.render('index'));
 app.get('/log-in', (req, res) => res.render('log-in-form'));
 app.post(
     '/log-in',
@@ -97,6 +96,29 @@ app.post('/join', async (req, res, next) => {
         res.send("Wrong passcode! <a href='/join'> Try again</a>");
     }
 })
+
+app.get('/', async (req, res, next) => {
+    try {
+        const messages = await db.getAllMessages();
+        res.render('index', { messages: messages });
+    } catch (err) {
+        next(err);
+    }
+});
+
+app.get('/new-message', (req, res) => {
+    if (!req.user) return res.redirect('/log-in');
+    res.render('new-message');
+});
+
+app.post('/new-message', async (req, res, next) => {
+    try {
+        await db.insertMessage(req.body.title, req.body.text, req.user.id);
+        res.redirect('/');
+    } catch (err) {
+        next(err);
+    }
+});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
