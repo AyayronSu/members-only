@@ -133,5 +133,16 @@ app.post('/message/:id/delete', async (req, res, next) => {
     }
 });
 
+app.get('/admin', (req, res) => res.render('admin-form'));
+
+app.post('/admin', async (req, res, next) => {
+    if (req.body.adminCode === 'secret-admin-pass') {
+        await db.promoteToAdmin(req.user.id);
+        res.redirect('/');
+    } else {
+        res.send('Wrong code!');
+    }
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
