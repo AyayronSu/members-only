@@ -54,9 +54,15 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.urlencoded({ extended: false }));
+
+app.use((req, res, next) => {
+    res.locals.currentUser = req.user;
+    next();
+});
+
 app.get('/sign-up', userController.signUpGet);
 app.post('/sign-up', userController.signUpPost);
-app.get('/', (req, res) => res.render('index', { user: req.user }));
+app.get('/', (req, res) => res.render('index'));
 app.get('/log-in', (req, res) => res.render('log-in-form'));
 app.post(
     '/log-in',
