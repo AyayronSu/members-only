@@ -38,6 +38,13 @@
                     <%= (currentUser && currentUser.membership_status) ? msg.first_name + ' ' + msg.last_name : 'Anonymous' %>
                 </p>
                 <p><small><%= msg.timestamp %></small></p>
+
+                <% if (currentUser && currentUser.is_admin) { %>
+                    <form action="/message/<%= msg.id %>/delete" method="POST">
+                        <button type="submit" style="color: red">Delete Message</button>
+                    </form>
+                <% } %>
+
             </div>
         <% }) %>
     </div>

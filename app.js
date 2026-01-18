@@ -120,5 +120,18 @@ app.post('/new-message', async (req, res, next) => {
     }
 });
 
+app.post('/message/:id/delete', async (req, res, next) => {
+    if (req.user && req.user.is_admin) {
+        try {
+            await db.deleteMessage(req.params.id);
+            res.redirect('/');
+        } catch (err) {
+            next(err);
+        }
+    } else {
+        res.status(403).send('Unauthorized');
+    }
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
