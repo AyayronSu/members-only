@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Members Only</title>
+</head>
+<body>
+    <h1>Welcome to Members Only</h1>
+
+    <% if (user) { %>
+        <h2>Welcome back, <%= user.first_name %>!</h2>
+        <a href="/log-out">Log Out</a>
+    <% } else { %>
+        <p>Please <a href="/sign-up">Sign Up</a> or <a href="/log-in">Log In</a></p>
+    <% } %>
+
+    <hr>
+    <h2>Messages</h2>
+    <% messages.forEach(msg => { %>
+        <div class="message">
+            <h3><%= msg.title %></h3>
+            <p><%= msg.text %></p>
+
+            <% if (currentUser && currentUser.membership_status) { %>
+                <p>By: <%= msg.first_name %> on <%= msg.timestamp %></p>
+            <% } else { %>
+                <p>By: Anonymous (Join the club to see who wrote this!)</p>
+            <% } %>
+        </div>
+    <% }) %>
+    <p>Sign up to see the secrets...</p>
+</body>
+</html>
